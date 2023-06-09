@@ -9,11 +9,11 @@ return {
   --     require("lsp_signature").setup()
   --   end,
   -- },
-  { 
-  "luisiacc/gruvbox-baby"
-  -- Add in any other configuration; 
-  --   event = foo, 
-  --   config = bar
-  --   end,
-  }, 
+  {"loctvl842/monokai-pro.nvim",
+    config = function()
+      require("monokai-pro").setup{
+        filter = "spectrum", -- classic | octagon | pro | machine | ristretto | spectrum
+      }
+    end
+  },
 }
