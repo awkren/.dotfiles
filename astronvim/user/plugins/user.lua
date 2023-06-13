@@ -9,5 +9,8 @@ return {
   --     require("lsp_signature").setup()
   --   end,
   -- },
-  {"luisiacc/gruvbox-baby"},
+  {
+    "olimorris/onedarkpro.nvim",
+    priority = 1000 -- Ensure it loads first
+  }
 }
