@@ -1,117 +1,77 @@
 return {
-  "nvim-lua/plenary.nvim",
-  { "AstroNvim/astrotheme", opts = { plugins = { ["dashboard-nvim"] = true } } },
-  { "famiu/bufdelete.nvim", cmd = { "Bdelete", "Bwipeout" } },
-  { "max397574/better-escape.nvim", event = "InsertCharPre", opts = { timeout = 300 } },
-  { "NMAC427/guess-indent.nvim", event = "User AstroFile", config = require "plugins.configs.guess-indent" },
-  { -- TODO: REMOVE neovim-session-manager with AstroNvim v4
-    "Shatur/neovim-session-manager",
-    event = "BufWritePost",
-    cmd = "SessionManager",
-    enabled = vim.g.resession_enabled ~= true,
-  },
+  -- customize alpha options
   {
-    "stevearc/resession.nvim",
-    enabled = vim.g.resession_enabled == true,
-    opts = {
-      buf_filter = function(bufnr) return require("astronvim.utils.buffer").is_valid(bufnr) end,
-      tab_buf_filter = function(tabpage, bufnr) return vim.tbl_contains(vim.t[tabpage].bufs, bufnr) end,
-      extensions = { astronvim = {} },
-    },
-  },
-  { "s1n7ax/nvim-window-picker", opts = { use_winbar = "smart" } },
-  {
-    "mrjones2014/smart-splits.nvim",
-    opts = { ignored_filetypes = { "nofile", "quickfix", "qf", "prompt" }, ignored_buftypes = { "nofile" } },
-  },
-  {
-    "windwp/nvim-autopairs",
-    event = "InsertEnter",
-    opts = {
-      check_ts = true,
-      ts_config = { java = false },
-      fast_wrap = {
-        map = "<M-e>",
-        chars = { "{", "[", "(", '"', "'" },
-        pattern = string.gsub([[ [%'%"%)%>%]%)%}%,] ]], "%s+", ""),
-        offset = 0,
-        end_key = "$",
-        keys = "qwertyuiopzxcvbnmasdfghjkl",
-        check_comma = true,
-        highlight = "PmenuSel",
-        highlight_grey = "LineNr",
-      },
-    },
-    config = require "plugins.configs.nvim-autopairs",
-  },
-  {
-    "folke/which-key.nvim",
-    event = "VeryLazy",
-    opts = {
-      icons = { group = vim.g.icons_enabled and "" or "+", separator = "" },
-      disable = { filetypes = { "TelescopePrompt" } },
-    },
-    config = require "plugins.configs.which-key",
-  },
-  {
-    "kevinhwang91/nvim-ufo",
-    event = { "User AstroFile", "InsertEnter" },
-    dependencies = { "kevinhwang91/promise-async" },
-    opts = {
-      preview = {
-        mappings = {
-          scrollB = "<C-b>",
-          scrollF = "<C-f>",
-          scrollU = "<C-u>",
-          scrollD = "<C-d>",
-        },
-      },
-      provider_selector = function(_, filetype, buftype)
-        local function handleFallbackException(bufnr, err, providerName)
-          if type(err) == "string" and err:match "UfoFallbackException" then
-            return require("ufo").getFolds(bufnr, providerName)
-          else
-            return require("promise").reject(err)
-          end
-        end
-
-        return (filetype == "" or buftype == "nofile") and "indent" -- only use indent until a file is opened
-          or function(bufnr)
-            return require("ufo")
-              .getFolds(bufnr, "lsp")
-              :catch(function(err) return handleFallbackException(bufnr, err, "treesitter") end)
-              :catch(function(err) return handleFallbackException(bufnr, err, "indent") end)
-          end
-      end,
-    },
-  },
-  {
-    "numToStr/Comment.nvim",
-    keys = {
-      { "gc", mode = { "n", "v" }, desc = "Comment toggle linewise" },
-      { "gb", mode = { "n", "v" }, desc = "Comment toggle blockwise" },
-    },
-    opts = function()
-      local commentstring_avail, commentstring = pcall(require, "ts_context_commentstring.integrations.comment_nvim")
-      return commentstring_avail and commentstring and { pre_hook = commentstring.create_pre_hook() } or {}
+    "goolord/alpha-nvim",
+    opts = function(_, opts)
+      -- customize the dashboard header
+      opts.section.header.val = {
+        " █████  ███████ ████████ ██████   ██████",
+        "██   ██ ██         ██    ██   ██ ██    ██",
+        "███████ ███████    ██    ██████  ██    ██",
+        "██   ██      ██    ██    ██   ██ ██    ██",
+        "██   ██ ███████    ██    ██   ██  ██████",
+        " ",
+        "    ███    ██ ██    ██ ██ ███    ███",
+        "    ████   ██ ██    ██ ██ ████  ████",
+        "    ██ ██  ██ ██    ██ ██ ██ ████ ██",
+        "    ██  ██ ██  ██  ██  ██ ██  ██  ██",
+        "    ██   ████   ████   ██ ██      ██",
+      }
+      return opts
     end,
   },
-  {
-    "akinsho/toggleterm.nvim",
-    cmd = { "ToggleTerm", "TermExec" },
-    opts = {
-      size = 10,
-      on_create = function()
-        vim.opt.foldcolumn = "0"
-        vim.opt.signcolumn = "no"
-      end,
-      open_mapping = [[<F7>]],
-      shading_factor = 2,
-      direction = "float",
-      float_opts = {
-        border = "curved",
-        highlights = { border = "Normal", background = "Normal" },
-      },
-    },
-  },
+  -- You can disable default plugins as follows:
+  -- { "max397574/better-escape.nvim", enabled = false },
+  --
+  -- You can also easily customize additional setup of plugins that is outside of the plugin's setup call
+  -- {
+  --   "L3MON4D3/LuaSnip",
+  --   config = function(plugin, opts)
+  --     require "plugins.configs.luasnip"(plugin, opts) -- include the default astronvim config that calls the setup call
+  --     -- add more custom luasnip configuration such as filetype extend or custom snippets
+  --     local luasnip = require "luasnip"
+  --     luasnip.filetype_extend("javascript", { "javascriptreact" })
+  --   end,
+  -- },
+  -- {
+  --   "windwp/nvim-autopairs",
+  --   config = function(plugin, opts)
+  --     require "plugins.configs.nvim-autopairs"(plugin, opts) -- include the default astronvim config that calls the setup call
+  --     -- add more custom autopairs configuration such as custom rules
+  --     local npairs = require "nvim-autopairs"
+  --     local Rule = require "nvim-autopairs.rule"
+  --     local cond = require "nvim-autopairs.conds"
+  --     npairs.add_rules(
+  --       {
+  --         Rule("$", "$", { "tex", "latex" })
+  --           -- don't add a pair if the next character is %
+  --           :with_pair(cond.not_after_regex "%%")
+  --           -- don't add a pair if  the previous character is xxx
+  --           :with_pair(
+  --             cond.not_before_regex("xxx", 3)
+  --           )
+  --           -- don't move right when repeat character
+  --           :with_move(cond.none())
+  --           -- don't delete if the next character is xx
+  --           :with_del(cond.not_after_regex "xx")
+  --           -- disable adding a newline when you press <cr>
+  --           :with_cr(cond.none()),
+  --       },
+  --       -- disable for .vim files, but it work for another filetypes
+  --       Rule("a", "a", "-vim")
+  --     )
+  --   end,
+  -- },
+  -- By adding to the which-key config and using our helper function you can add more which-key registered bindings
+  -- {
+  --   "folke/which-key.nvim",
+  --   config = function(plugin, opts)
+  --     require "plugins.configs.which-key"(plugin, opts) -- include the default astronvim config that calls the setup call
+  --     -- Add bindings which show up as group name
+  --     local wk = require "which-key"
+  --     wk.register({
+  --       b = { name = "Buffer" },
+  --     }, { mode = "n", prefix = "<leader>" })
+  --   end,
+  -- },
 }
