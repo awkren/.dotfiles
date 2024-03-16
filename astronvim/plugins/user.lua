@@ -38,12 +38,39 @@ return {
 
   -- colorscheme vscode
   {'Mofiqul/vscode.nvim'},
+
+  -- colorscheme minischeme
+  { 'echasnovski/mini.nvim', version = false },
   
+  -- colorscheme miasma
+  {"xero/miasma.nvim"},
+
+  -- colorscheme truedark-vim
+  {'bratpeki/truedark-vim'},
+
   --discord presence
   {
     'andweeb/presence.nvim',
     event = "VeryLazy",
     opts = {},
   },
+
+  -- codeium
+  {
+    'Exafunction/codeium.vim',
+    event = 'BufEnter',
+    config = function ()
+        vim.g.codeium_disable_bindings = 1
+        vim.keymap.set('i', '<C-cr>', function () return vim.fn['codeium#Accept']() end, { expr = true, silent = true })
+        vim.keymap.set('i', '<c-;>', function() return vim.fn['codeium#CycleCompletions'](1) end, { expr = true, silent = true })
+        vim.keymap.set('i', '<c-,>', function() return vim.fn['codeium#CycleCompletions'](-1) end, { expr = true, silent = true })
+        vim.keymap.set('i', '<c-x>', function() return vim.fn['codeium#Clear']() end, { expr = true, silent = true })
+    end
+  },
+
+  -- colorscheme papercolor-theme
+  {
+    'NLKNguyen/papercolor-theme'
+  }
 
 }

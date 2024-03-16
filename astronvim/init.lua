@@ -19,6 +19,8 @@ return {
 
   -- Set colorscheme to use
   colorscheme = "kanagawa-dragon",
+  -- colorscheme = "PaperColor",
+  -- colorscheme = "oxocarbon",
   -- colorscheme = "melange",
   -- colorscheme = "vscode",
 
@@ -84,4 +86,6 @@ return {
     --   },
     -- }
   end,
+
+  
 }
