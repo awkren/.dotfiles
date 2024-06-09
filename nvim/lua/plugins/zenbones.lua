@@ -1,3 +1,0 @@
-return {
-  "mcchrish/zenbones.nvim"
-}
