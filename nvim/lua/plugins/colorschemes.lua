@@ -38,7 +38,7 @@ return {
         undercurl = true, -- enable undercurls
         commentStyle = { italic = true },
         functionStyle = {},
-        keywordStyle = { italic = true },
+        keywordStyle = { italic = false },
         statementStyle = {},
         typeStyle = {},
         transparent = false, -- do not set background color
@@ -66,7 +66,7 @@ return {
     config = function()
       require('modus-themes').setup {
         style = 'modus_operandi', -- Always use modus_operandi regardless of `vim.o.background`
-        variant = 'deuteranopia', -- Theme comes in four variants `default`, `tinted`, `deuteranopia`, and `tritanopia`
+        variants = 'deuteranopia', -- Theme comes in four variants `default`, `tinted`, `deuteranopia`, and `tritanopia`
         styles = {
           comments = { italic = true },
           keywords = { italic = false },
